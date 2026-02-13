@@ -14,8 +14,8 @@ public class MovieController {
 
     // Constructor - add some default movies
     public MovieController() {
-        movieList.add(new Movie(1, "Inception", "Sci-Fi"));
-        movieList.add(new Movie(2, "Avengers", "Action"));
+        movieList.add(new Movie(1L, "Inception", "Sci-Fi"));
+        movieList.add(new Movie(2L, "Avengers", "Action"));
     }
 
     // ===============================
