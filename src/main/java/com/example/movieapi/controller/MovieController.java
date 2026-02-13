@@ -1,36 +1,71 @@
 package com.example.movieapi.controller;
 
 import com.example.movieapi.model.Movie;
-import com.example.movieapi.service.MovieService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
 
-    @Autowired
-    private MovieService movieService;
+    private List<Movie> movieList = new ArrayList<>();
 
-    @PostMapping
-    public ResponseEntity<Movie> addMovie(@Valid @RequestBody Movie movie) {
-        Movie savedMovie = movieService.addMovie(movie);
-        return ResponseEntity.ok(savedMovie);
+    // Constructor - add some default movies
+    public MovieController() {
+        movieList.add(new Movie(1, "Inception", "Sci-Fi"));
+        movieList.add(new Movie(2, "Avengers", "Action"));
     }
 
+    // ===============================
+    // ✅ Get all movies
+    // ===============================
+    @GetMapping
+    public List<Movie> getAllMovies() {
+        return movieList;
+    }
+
+    // ===============================
+    // ✅ Get movie by ID
+    // ===============================
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMovieById(@PathVariable Integer id) {
+    public Movie getMovieById(@PathVariable int id) {
+        return movieList.stream()
+                .filter(movie -> movie.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Movie not found with id: " + id));
+    }
 
-        Movie movie = movieService.getMovieById(id);
+    // ===============================
+    // ✅ Add new movie
+    // ===============================
+    @PostMapping
+    public Movie addMovie(@RequestBody Movie movie) {
+        movieList.add(movie);
+        return movie;
+    }
 
-        if (movie == null) {
-            return ResponseEntity
-                    .status(404)
-                    .body("Movie not found with id: " + id);
-        }
+    // ===============================
+    // ✅ Update movie
+    // ===============================
+    @PutMapping("/{id}")
+    public Movie updateMovie(@PathVariable int id, @RequestBody Movie updatedMovie) {
 
-        return ResponseEntity.ok(movie);
+        Movie movie = getMovieById(id);
+        movie.setTitle(updatedMovie.getTitle());
+        movie.setGenre(updatedMovie.getGenre());
+
+        return movie;
+    }
+
+    // ===============================
+    // ✅ Delete movie
+    // ===============================
+    @DeleteMapping("/{id}")
+    public String deleteMovie(@PathVariable int id) {
+        Movie movie = getMovieById(id);
+        movieList.remove(movie);
+        return "Movie deleted successfully!";
     }
 }
