@@ -1,49 +1,45 @@
 package com.example.movieapi.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class Movie {
 
-    @NotNull(message = "Id is required")
-    private Integer id;
+    private Long id;
+    private String title;
+    private String genre;
 
-    @NotBlank(message = "Name is required")
-    private String name;
-
-    @NotBlank(message = "Description is required")
-    private String description;
-
+    // Default constructor
     public Movie() {
     }
 
-    public Movie(Integer id, String name, String description) {
+    // Parameterized constructor
+    public Movie(Long id, String title, String genre) {
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.title = title;
+        this.genre = genre;
     }
 
-    public Integer getId() {
+    // Getters
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public String getTitle() {
+        return title;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    // Setters
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 }
